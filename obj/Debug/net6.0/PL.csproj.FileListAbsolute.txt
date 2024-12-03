@@ -1,0 +1,14 @@
+C:\dev\PL\PL\bin\Debug\net6.0\PL.exe
+C:\dev\PL\PL\bin\Debug\net6.0\PL.deps.json
+C:\dev\PL\PL\bin\Debug\net6.0\PL.runtimeconfig.json
+C:\dev\PL\PL\bin\Debug\net6.0\PL.dll
+C:\dev\PL\PL\bin\Debug\net6.0\PL.pdb
+C:\dev\PL\PL\obj\Debug\net6.0\PL.GeneratedMSBuildEditorConfig.editorconfig
+C:\dev\PL\PL\obj\Debug\net6.0\PL.AssemblyInfoInputs.cache
+C:\dev\PL\PL\obj\Debug\net6.0\PL.AssemblyInfo.cs
+C:\dev\PL\PL\obj\Debug\net6.0\PL.csproj.CoreCompileInputs.cache
+C:\dev\PL\PL\obj\Debug\net6.0\PL.dll
+C:\dev\PL\PL\obj\Debug\net6.0\refint\PL.dll
+C:\dev\PL\PL\obj\Debug\net6.0\PL.pdb
+C:\dev\PL\PL\obj\Debug\net6.0\PL.genruntimeconfig.cache
+C:\dev\PL\PL\obj\Debug\net6.0\ref\PL.dll

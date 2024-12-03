@@ -1,0 +1,9 @@
+{
+  "profiles": {
+    "PL": {
+      "commandName": "Project",
+      "commandLineArgs": "main.pl",
+      "workingDirectory": "C:\\dev\\PL"
+    }
+  }
+}
