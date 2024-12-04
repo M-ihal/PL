@@ -1,69 +1,74 @@
 ﻿using System;
 using System.IO;
+using System.Runtime.CompilerServices;
 using System.Text;
 
-namespace PL
+internal class Program
 {
-    internal class Program
+    private static void PrintASTree(AstNode? node, int level)
     {
-        static void Main(string[] args)
+        if(node == null)
         {
-            Console.OutputEncoding = Encoding.UTF8;
+            return;
+        }
 
-            if (args.Length == 0)
-            {
-                Console.Error.WriteLine("No file specified.\n");
-                return;
-            }
+        // @TODO 
+    }
 
+    static void Main(string[] args)
+    {
+        Console.OutputEncoding = Encoding.UTF8;
+
+        if (args.Length == 0)
+        {
+            Console.Error.WriteLine("No file specified.\n");
+            return;
+        }
+
+        try
+        {
             string filepath = args[0];
             string extension = Path.GetExtension(filepath);
             if (extension != ".pl")
             {
-                Console.Error.WriteLine("Invalid file specified (Wrong extension).\nFile specified: \"" + filepath + "\"\n");
-                return;
+                throw new Exception("Invalid file specified (Wrong extension).\nFile specified: \"" + filepath + "\"\n");
             }
 
-            try
+            string filedata = File.ReadAllText(filepath);
+            Console.WriteLine("Successfully read file: \"" + filepath + "\".\n");
+            Console.WriteLine(filedata);
+            Console.WriteLine();
+
+            Lexer lexer = new Lexer(filedata);
+            List<Token> tokens = lexer.Tokenize();
+
+            // Write out tokens
             {
-                string filedata = File.ReadAllText(filepath);
-                Console.WriteLine("Successfully read file: \"" + filepath + "\".\n");
-                Console.WriteLine(filedata);
-
-                Lexer lexer = new Lexer(filedata);
-
-                bool finished = false;
-                while (finished == false)
+                Console.WriteLine("Tokens:");
+                foreach(Token token in tokens)
                 {
-                    Token token = lexer.NextToken();
-
-                    Console.WriteLine("Token: " + token.type_.ToString() + " = \"" + token.token_ + "\"");
-                                        
-                    switch (token.type_)
-                    {
-                        default:
-                        {
-                            break;
-                        }
-                        case TokenType.END_OF_FILE:
-                        {
-                            finished = true;
-                            break;
-                        }
-                    }
+                    Console.WriteLine(token.type_.ToString() + " -> \"" + token.token_ + "\"");
                 }
             }
-            catch (Exception ex)
-            {
-                Console.Error.WriteLine("Exception:\n" + ex.ToString());
-                return;
-            }
 
-            if (System.Diagnostics.Debugger.IsAttached)
+            Parser parser = new Parser(tokens);
+            AstNode ast_root = parser.ParseToAST();
+
+            if(ast_root != null)
             {
-                Console.WriteLine("Press any key to exit...");
-                Console.ReadKey();
-            }
+                PrintASTree(ast_root, 0);
+            } 
+        }
+        catch (Exception ex)
+        {
+            Console.Error.WriteLine("Exception:\n" + ex.ToString());
+            return;
+        }
+
+        if (System.Diagnostics.Debugger.IsAttached)
+        {
+            Console.WriteLine("Press any key to exit...");
+            Console.ReadKey();
         }
     }
 }

@@ -1,3 +1,2 @@
-główny :: (argumenty : Łańcuch) -> liczba {
-	cofnij -3322;
+główny :: (_l : liczba64) {
 }
