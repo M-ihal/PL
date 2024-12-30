@@ -27,43 +27,113 @@ public class AstProgramRoot : AstNode
     }
 }
 
-public class AstTypeInt64 : AstNode
+public class AstParameterInt64 : AstNode
 {
-    string identifier_;
-    int bytes_;
+    private string identifier_;
 
-    public AstTypeInt64(string identifier)
+    public AstParameterInt64(string identifier)
     {
         identifier_ = identifier;
-        bytes_ = 8;
+    }
+}
+
+public class AstDeclarationInt64 : AstNode
+{
+    private string identifier_;
+    private Int64 initial_value_;
+
+    public AstDeclarationInt64(string identifier, Int64 initial_value = 0)
+    {
+        identifier_ = identifier;
+        initial_value_ = initial_value;
+    }
+}
+
+public class AstLiteralInt64 : AstNode
+{
+    public Int64 value_ { get; private set; }
+
+    public AstLiteralInt64(Int64 value)
+    {
+        value_ = value;
+    }
+}
+
+public class AstVariableInt64 : AstNode
+{
+    public string identifier_ { get; private set; }
+    public AstVariableInt64(string identifier_)
+    {
+        this.identifier_ = identifier_;
+    }
+}
+
+public class AstAssignment : AstNode
+{
+    public AstNode variable_ { get; private set; }
+    public AstNode assign_value_ { get; private set; }
+
+    public AstAssignment(AstNode variable, AstNode assign_value)
+    {
+        variable_ = variable;
+        assign_value_ = assign_value;
+    }
+}
+
+public class AstReturn : AstNode
+{
+    public AstNode return_value_ { get; private set; }
+
+    public AstReturn(AstNode return_value_)
+    {
+        this.return_value_ = return_value_;
+    }
+}
+
+public class AstBlock : AstNode
+{
+    public List<AstNode> statements_ { get; private set; }
+    
+    public AstBlock()
+    {
+        statements_ = new List<AstNode>();
+    }
+
+    public void AddStatement(AstNode node)
+    {
+        statements_.Add(node);
     }
 }
 
 public class AstProcedure : AstNode
 {
-    string signature_;
-    List<AstNode> arguments_;
+    public string signature_ { get; private set; }
+    public List<AstNode> arguments_ { get; private set; }
+    public AstBlock block_ { get; private set; }
 
-    public AstProcedure(string singnature)
+    // @TODO : Shouldn't be string!!!
+    public string return_type_ { get; private set; }
+    
+    public AstProcedure(string signature)
     {
-        signature_ = singnature;
+        signature_ = signature;
         arguments_ = new List<AstNode>();
+        block_ = new AstBlock();
+        return_type_ = "";
     }
 
-    public void AddArgument(string identifier_, TokenType type)
+    public void AddParameter(AstParameterInt64 param)
     {
-        switch (type)
-        {
-            default:
-            {
-                throw new Exception("Undefined argument type.");
-            }
+        arguments_.Add(param);
+    }
 
-            case TokenType.KEYWORD_INT64:
-            {
-                AstTypeInt64 ast_int64 = new AstTypeInt64(identifier_);
-                arguments_.Add(ast_int64);
-            } break;
-        }
+    public void SetReturnType(string return_type)
+    {
+        return_type_ = return_type;
+    }
+
+    public void SetBlock(AstBlock block)
+    {
+        block_ = block;
     }
 }

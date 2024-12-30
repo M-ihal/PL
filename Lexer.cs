@@ -9,6 +9,7 @@ public enum TokenType
     IDENTIFIER,
     NUMBER,
     STRING,
+    COMMA,
     COLON,
     DOUBLE_COLON,
     SEMI_COLON,
@@ -49,14 +50,13 @@ public static class Keywords
 public enum KeywordType
 {
     KEYWORD_RETURN,
-
 }
 
 // "Union" for variable values
 [StructLayout(LayoutKind.Explicit)]
 public struct TokenValue
 {
-    [FieldOffset(0)] public Int64 value_integer;
+    [FieldOffset(0)] public Int64 value_int64;
     [FieldOffset(0)] public double value_float;
 }
 
@@ -129,12 +129,12 @@ public class Lexer
             }
         }
 
-        // Should've never be called if does not start with a letter or underscore
-        if(identifier.Length > 0)
-        {
-            System.Diagnostics.Debug.Assert(Char.IsLetter(identifier[0]) || identifier[0] == '_');
-        }
+        // Sanity check, Empty identifier can't be a thing
+        System.Diagnostics.Debug.Assert(identifier.Length > 0);
 
+        // Should've never be called if does not start with a letter or underscore
+        System.Diagnostics.Debug.Assert(Char.IsLetter(identifier[0]) || identifier[0] == '_');
+        
         return identifier;
     }
 
@@ -186,7 +186,7 @@ public class Lexer
         {
             string number = ReadNumber();
             token.type_ = TokenType.NUMBER;
-            token.value_.value_integer = Int64.Parse(number);
+            token.value_.value_int64 = Int64.Parse(number);
             token.token_ = number;
         }
         else if (_char == '{')
@@ -242,6 +242,12 @@ public class Lexer
             token.type_ = TokenType.SEMI_COLON;
             token.token_ = ";";
         }
+        else if (_char == ',')
+        {
+            EatChar();
+            token.type_ = TokenType.COMMA;
+            token.token_ = ",";
+        }
         else if (_char == '-')
         {
             EatChar();
@@ -257,7 +263,7 @@ public class Lexer
             {
                 string number = "-" + ReadNumber();
                 token.type_ = TokenType.NUMBER;
-                token.value_.value_integer = Int64.Parse(number);
+                token.value_.value_int64 = Int64.Parse(number);
                 token.token_ = number;
             }
             else
